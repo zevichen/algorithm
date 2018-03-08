@@ -11,28 +11,25 @@ import (
 func main() {
 
 	var count int
-	//var size int
-	//var str string
-	//var match string
 
 	fmt.Scanln(&count)
+
 	arrSize := make([]int, count)
 	arrStr := make([]string, count)
 	arrMatch := make([]string, count)
-	fmt.Println(count)
-
 	reader := bufio.NewReader(os.Stdin)
 
 	for i := 0; i < count; i++ {
 		s, _ := reader.ReadString('\n')
-		atoi, _ := strconv.Atoi(s)
-		arrSize[i] = atoi
+		num, _ := strconv.Atoi(strings.TrimSpace(s))
+		arrSize[i] = num
+
 		s, _ = reader.ReadString('\n')
-		arrStr[i] = s
+		arrStr[i] = strings.TrimSpace(s)
+
 		s, _ = reader.ReadString('\n')
-		arrMatch[i] = s
+		arrMatch[i] = strings.TrimSpace(s)
 	}
-	fmt.Println(arrSize, arrStr, arrMatch)
 
 	//var count = 3
 	//arrStr := make([]string, count)
@@ -48,13 +45,13 @@ func main() {
 	//	"aaaaaaaaaab",
 	//}
 
-	//for j := 0; j < count; j++ {
-	//	cut := strings.Split(arrStr[j], " ")
-	//	rst := make([]string, 0)
-	//
-	//	s, _ := recursion(cut, rst, arrMatch[j])
-	//	fmt.Println(s)
-	//}
+	for j := 0; j < count; j++ {
+		cut := strings.Split(arrStr[j], " ")
+		rst := make([]string, 0)
+
+		s, _ := recursion(cut, rst, arrMatch[j])
+		fmt.Println(s)
+	}
 }
 
 func recursion(origin, rst []string, match string) (string, bool) {
