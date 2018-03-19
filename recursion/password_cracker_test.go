@@ -6,9 +6,10 @@ import (
 	"bufio"
 	"os"
 	"strconv"
+	"testing"
 )
 
-func main() {
+func TestMain(m *testing.M) {
 
 	var count int
 
@@ -49,14 +50,23 @@ func main() {
 		cut := strings.Split(arrStr[j], " ")
 		rst := make([]string, 0)
 
-		s, _ := recursion(cut, rst, arrMatch[j])
-		fmt.Println(s)
+		if notContainLetter(arrMatch[j], arrStr[j]) {
+			fmt.Println("WRONG PASSWORD")
+			continue
+		}
+
+		recursion, b := recursion(cut, rst, arrMatch[j])
+		if b {
+			fmt.Println(strings.Join(recursion, " "))
+		} else {
+			fmt.Println("WRONG PASSWORD")
+		}
 	}
 }
 
-func recursion(origin, rst []string, match string) (string, bool) {
+func recursion(origin, rst []string, match string) ([]string, bool) {
 	if len(match) == 0 {
-		return strings.Join(rst, " "), true
+		return rst, true
 	}
 
 	for i := 0; i < len(origin); i++ {
@@ -64,14 +74,24 @@ func recursion(origin, rst []string, match string) (string, bool) {
 		if strings.HasPrefix(match, origin[i]) {
 			match = strings.Replace(match, origin[i], "", 1)
 			rst = append(rst, origin[i])
-		} else {
-			continue
+			temp, flag := recursion(origin, rst, match)
+			if flag {
+				return temp, flag
+			}
 		}
-		s, b := recursion(origin, rst, match)
-		if b {
-			return s, b
-		}
-
 	}
-	return "WRONG PASSWORD", false
+	return nil, false
+
+}
+
+func notContainLetter(left, right string) bool {
+	replace := strings.Replace(left, " ", "", -1)
+	letter := strings.Split(replace, "")
+	for i := range letter {
+		if !strings.Contains(right, letter[i]) {
+			return true
+		}
+	}
+	return false
+
 }
