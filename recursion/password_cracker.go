@@ -6,10 +6,9 @@ import (
 	"bufio"
 	"os"
 	"strconv"
-	"testing"
 )
 
-func TestMain(m *testing.M) {
+func main() {
 
 	var count int
 
