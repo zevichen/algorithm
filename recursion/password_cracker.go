@@ -8,6 +8,7 @@ import (
 	"strconv"
 )
 
+//https://www.hackerrank.com/challenges/password-cracker/problem
 func main() {
 
 	var count int
@@ -31,20 +32,6 @@ func main() {
 		arrMatch[i] = strings.TrimSpace(s)
 	}
 
-	//var count = 3
-	//arrStr := make([]string, count)
-	//arrMatch := make([]string, count)
-	//arrStr = []string{
-	//	"ozkxyhkcst xvglh hpdnb zfzahm",
-	//	"gurwgrb maqz holpkhqx aowypvopu",
-	//	"a aa aaa aaaa aaaaa aaaaaa aaaaaaa aaaaaaaa aaaaaaaaa aaaaaaaaaa",
-	//}
-	//arrMatch = []string{
-	//	"zfzahm",
-	//	"gurwgrb",
-	//	"aaaaaaaaaab",
-	//}
-
 	for j := 0; j < count; j++ {
 		cut := strings.Split(arrStr[j], " ")
 		rst := make([]string, 0)
@@ -54,33 +41,33 @@ func main() {
 			continue
 		}
 
-		recursion, b := recursion(cut, rst, arrMatch[j])
-		if b {
-			fmt.Println(strings.Join(recursion, " "))
-		} else {
+		if !recursion(cut, rst, arrMatch[j], 0) {
 			fmt.Println("WRONG PASSWORD")
 		}
 	}
 }
 
-func recursion(origin, rst []string, match string) ([]string, bool) {
-	if len(match) == 0 {
-		return rst, true
+func recursion(origin, rst []string, match string, depth int) bool {
+
+	depth += 1
+	length := len(match)
+	if length == 0 {
+		fmt.Println(strings.Join(rst, " "))
+		return true
 	}
-
+	if depth > 2000 {
+		return false
+	}
 	for i := 0; i < len(origin); i++ {
-
-		if strings.HasPrefix(match, origin[i]) {
-			match = strings.Replace(match, origin[i], "", 1)
-			rst = append(rst, origin[i])
-			temp, flag := recursion(origin, rst, match)
-			if flag {
-				return temp, flag
+		orSize := len(origin[i])
+		if len(match) >= orSize {
+			if match[:orSize] == origin[i] {
+				rst = append(rst, origin[i])
+				return recursion(origin, rst, match[orSize:], depth)
 			}
 		}
 	}
-	return nil, false
-
+	return false
 }
 
 func notContainLetter(left, right string) bool {
